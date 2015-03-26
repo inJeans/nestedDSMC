@@ -1,0 +1,94 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		44F0D8001AC17479000458FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
+		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
+		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		44F0D8061AC2C133000458FA /* mainQuestions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mainQuestions.cpp; path = src/mainQuestions.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		44F0D7F81AC17422000458FA = {
+			isa = PBXGroup;
+			children = (
+				44F0D8021AC17647000458FA /* Makefile */,
+				44F0D8041AC1765F000458FA /* include */,
+				44F0D8031AC1764E000458FA /* src */,
+			);
+			sourceTree = "<group>";
+		};
+		44F0D8031AC1764E000458FA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				44F0D8001AC17479000458FA /* main.cpp */,
+				44F0D8061AC2C133000458FA /* mainQuestions.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		44F0D8041AC1765F000458FA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				44F0D8051AC177DF000458FA /* main.cuh */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		44F0D7F91AC17422000458FA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+			};
+			buildConfigurationList = 44F0D7FC1AC17422000458FA /* Build configuration list for PBXProject "nestedDSMC" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 44F0D7F81AC17422000458FA;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		44F0D7FD1AC17422000458FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		44F0D7FE1AC17422000458FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		44F0D7FC1AC17422000458FA /* Build configuration list for PBXProject "nestedDSMC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44F0D7FD1AC17422000458FA /* Debug */,
+				44F0D7FE1AC17422000458FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 44F0D7F91AC17422000458FA /* Project object */;
+}
