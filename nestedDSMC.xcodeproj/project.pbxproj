@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		1D43E4921AC3D72E005DC164 /* shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shader.cpp; path = src/shader.cpp; sourceTree = "<group>"; };
+		1D43E4941AC3D8A9005DC164 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = src/shader.vert; sourceTree = "<group>"; };
+		1D43E4951AC3D8C2005DC164 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.frag; path = src/shader.frag; sourceTree = "<group>"; };
+		1D43E4961AC3DA94005DC164 /* shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = shader.hpp; path = include/shader.hpp; sourceTree = "<group>"; };
 		44F0D8001AC17479000458FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; };
 		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
 		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		44F0D8061AC2C133000458FA /* mainQuestions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mainQuestions.cpp; path = src/mainQuestions.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -27,7 +30,9 @@
 			isa = PBXGroup;
 			children = (
 				44F0D8001AC17479000458FA /* main.cpp */,
-				44F0D8061AC2C133000458FA /* mainQuestions.cpp */,
+				1D43E4921AC3D72E005DC164 /* shader.cpp */,
+				1D43E4941AC3D8A9005DC164 /* shader.vert */,
+				1D43E4951AC3D8C2005DC164 /* shader.frag */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -35,6 +40,7 @@
 		44F0D8041AC1765F000458FA /* include */ = {
 			isa = PBXGroup;
 			children = (
+				1D43E4961AC3DA94005DC164 /* shader.hpp */,
 				44F0D8051AC177DF000458FA /* main.cuh */,
 			);
 			name = include;

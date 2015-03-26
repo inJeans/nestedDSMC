@@ -62,7 +62,7 @@ debug: $(EXEC)
 profile: NVCCFLAGS += -pg
 profile: $(EXEC)
 
-$(EXEC): $(addprefix $(OBJDIR), mainQuestions.o )
+$(EXEC): $(addprefix $(OBJDIR), main.o shader.o)
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Linker'
 	clang++ -stdlib=libc++ -o $@ $(INCLUDE) $^ $(LIB) -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
