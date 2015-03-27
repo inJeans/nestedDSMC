@@ -8,5 +8,5 @@ uniform vec4 ourColor;
 
 void main()
 {
-	color = pos;
+	color = 0.5 * ( pos + 1.0 );
 }

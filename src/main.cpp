@@ -19,12 +19,15 @@
 // Other includes
 #include "Shader.hpp"
 
+void computeFPS( GLFWwindow* window );
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
+
+float frameCount = 0;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -61,8 +64,12 @@ int main()
         return -1;
     }
     
+    int fbwidth, fbheight;
+    glfwGetFramebufferSize(window,
+                           &fbwidth,
+                           &fbheight) ;
     // Define the viewport dimensions
-    glViewport(0, 0, WIDTH, HEIGHT);
+    glViewport(0, 0, fbwidth, fbheight);
     
 	Shader ourShader("./src/shader.vert", "./src/shader.frag");
 	
@@ -85,10 +92,10 @@ int main()
     glBindVertexArray(VAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
@@ -110,7 +117,8 @@ int main()
         
         // Render
         // Clear the colorbuffer
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         ourShader.Use();
@@ -127,9 +135,15 @@ int main()
 		glUniform1f(glGetUniformLocation(ourShader.Program, "offset"), offset );
 		
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glPointSize(10.0f);//set point size to 10 pixels
+//        glDrawElements(GL_POINTS, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_POINTS, 0, 4);
         glBindVertexArray(0);
-		
+//        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        
+        computeFPS(window);
+        
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
@@ -149,4 +163,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     std::cout << key << std::endl;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+void computeFPS( GLFWwindow* window )
+{
+    frameCount++;
+    float avgFPS = frameCount / glfwGetTime();
+    
+    char fps[256];
+    sprintf(fps, "Cuda GL Interop (VBO): %3.1f fps", avgFPS);
+    
+    glfwSetWindowTitle( window, fps );
 }
