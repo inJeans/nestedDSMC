@@ -10,6 +10,11 @@ void main()
 			   position.y,
 			   position.z,
 			   1.0f);
+
+//	pos = vec4(0.0,
+//			   0.0,
+//			   0.0,
+//			   1.0f);
 	
 	gl_Position = pos;
 }

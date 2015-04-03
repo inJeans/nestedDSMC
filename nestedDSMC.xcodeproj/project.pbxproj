@@ -11,7 +11,13 @@
 		1D43E4941AC3D8A9005DC164 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = src/shader.vert; sourceTree = "<group>"; };
 		1D43E4951AC3D8C2005DC164 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.frag; path = src/shader.frag; sourceTree = "<group>"; };
 		1D43E4961AC3DA94005DC164 /* shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = shader.hpp; path = include/shader.hpp; sourceTree = "<group>"; };
-		44F0D8001AC17479000458FA /* main.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cu; path = src/main.cu; sourceTree = "<group>"; };
+		1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = openGLhelpers.cpp; path = src/openGLhelpers.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = openGLhelpers.hpp; path = include/openGLhelpers.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D6DAB1E1ACE34F0001A6A8D /* systemParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = systemParameters.h; path = include/systemParameters.h; sourceTree = "<group>"; };
+		1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = vectorMath.cuh; path = include/vectorMath.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D6DAB211ACE7B2B001A6A8D /* setUp.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cu; path = src/setUp.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cuh; path = include/setUp.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		44F0D8001AC17479000458FA /* main.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cu; path = src/main.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
 		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8071AC8A896000458FA /* moveAtoms.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = moveAtoms.cu; path = src/moveAtoms.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -32,7 +38,9 @@
 			isa = PBXGroup;
 			children = (
 				44F0D8001AC17479000458FA /* main.cu */,
+				1D6DAB211ACE7B2B001A6A8D /* setUp.cu */,
 				44F0D8071AC8A896000458FA /* moveAtoms.cu */,
+				1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */,
 				1D43E4921AC3D72E005DC164 /* shader.cpp */,
 				1D43E4941AC3D8A9005DC164 /* shader.vert */,
 				1D43E4951AC3D8C2005DC164 /* shader.frag */,
@@ -43,9 +51,13 @@
 		44F0D8041AC1765F000458FA /* include */ = {
 			isa = PBXGroup;
 			children = (
-				1D43E4961AC3DA94005DC164 /* shader.hpp */,
+				1D6DAB1E1ACE34F0001A6A8D /* systemParameters.h */,
 				44F0D8051AC177DF000458FA /* main.cuh */,
+				1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */,
 				44F0D8081AC8A8D8000458FA /* moveAtoms.cuh */,
+				1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */,
+				1D43E4961AC3DA94005DC164 /* shader.hpp */,
+				1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */,
 			);
 			name = include;
 			sourceTree = "<group>";

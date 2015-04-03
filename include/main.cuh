@@ -20,17 +20,25 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+// CUDA
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
+#include <curand_kernel.h>
 
 // Other includes
 #include "Shader.hpp"
+#include "setUp.cuh"
 #include "moveAtoms.cuh"
+#include "openGLhelpers.hpp"
 
 // Function prototypes
-void computeFPS( GLFWwindow* window );
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+#define cudaCalloc(A, B, C) \
+do { \
+cudaError_t __cudaCalloc_err = cudaMalloc(A, (B)*C); \
+if (__cudaCalloc_err == cudaSuccess) cudaMemset(*A, 0, (B)*C); \
+} while (0)
+
 
 #endif /* defined(__nestedDSMC__main__) */

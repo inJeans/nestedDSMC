@@ -21,9 +21,9 @@ CLANG ?= /usr/bin/clang++
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Darwin) #If building on an OSX system
-	CUDA_PATH= /Developer/NVIDIA/CUDA-6.5
-	CUDA_INC = -I/Developer/NVIDIA/CUDA-6.5/include
-	CUDA_LIB = -L/Developer/NVIDIA/CUDA-6.5/lib
+	CUDA_PATH= /Developer/NVIDIA/CUDA-7.0
+	CUDA_INC = -I/Developer/NVIDIA/CUDA-7.0/include
+	CUDA_LIB = -L/Developer/NVIDIA/CUDA-7.0/lib
 	NVCC     = $(CUDA_PATH)/bin/nvcc -ccbin $(CLANG)
 	INCLUDE = -I /usr/local/hdf5/include -I /usr/local/Cellar/glew/1.11.0/include/
 	LIB = -L /usr/local/hdf5/lib -L /usr/local/Cellar/glew/1.11.0/lib/
@@ -62,24 +62,24 @@ debug: $(EXEC)
 profile: NVCCFLAGS += -pg
 profile: $(EXEC)
 
-$(EXEC): $(addprefix $(OBJDIR), main.o shader.o moveAtoms.o)
+$(EXEC): $(addprefix $(OBJDIR), main.o setUp.o moveAtoms.o openGLhelpers.o shader.o)
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Linker'
-	clang++ -v -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -stdlib=libstdc++ -lcudart -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+	clang++ -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -lc++ -lcudart -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 
-#$(OBJDIR)%.o: $(SRCDIR)%.cpp
-#	@echo 'Building file: $<'
-#	@echo 'Invoking: clang Compiler'
-#	clang++ -stdlib=libc++ $(INCLUDE) $(CUDA_INC) -o $@ -c $?
-#	@echo "Finished building: $< $(OK_STRING)"
-#	@echo ' '
+$(OBJDIR)%.o: $(SRCDIR)%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: clang Compiler'
+	clang++ -lc++ $(INCLUDE) $(CUDA_INC) -o $@ -c $?
+	@echo "Finished building: $< $(OK_STRING)"
+	@echo ' '
 
-$(OBJDIR)%.o: $(SRCDIR)%.c*
+$(OBJDIR)%.o: $(SRCDIR)%.cu
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
-	$(NVCC) $(NVCCFLAGS) $(INCLUDE) -v -o $@ -c $?
+	$(NVCC) -v $(NVCCFLAGS) $(INCLUDE) -o $@ -c $? -D CUDA7
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 
@@ -89,9 +89,9 @@ run:
 #	/usr/local/hdf5/bin/h5import "./src/main.cu" -c "./hdfimportconfig/h5import-main.conf" -o "mmDataMCWF.h5"
 #	/usr/local/hdf5/bin/h5import "./src/evolveSpin.cu" -c "./hdfimportconfig/h5import-evolveSpin.conf" -o "mmDataMCWF.h5"
 #	/usr/local/hdf5/bin/h5import "Makefile" -c "./hdfimportconfig/h5import-makefile.conf" -o "mmDataMCWF.h5"
-	@echo "" >> output.txt
-	@echo "----------------------------------------" >> output.txt
-	@echo "" >> output.txt
+#	@echo "" >> output.txt
+#	@echo "----------------------------------------" >> output.txt
+#	@echo "" >> output.txt
 	tput bel
 
 memcheck:
