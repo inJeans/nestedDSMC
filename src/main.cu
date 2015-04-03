@@ -6,23 +6,7 @@
 //
 //
 
-#include <iostream>
-#include <math.h>
-
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
-
-// Other includes
-#include "Shader.hpp"
-
-void computeFPS( GLFWwindow* window );
-
-// Function prototypes
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+#include "main.cuh"
 
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -34,44 +18,44 @@ int main()
 {
     std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl;
     // Init GLFW
-    glfwInit();
+//    glfwInit();
     // Set all the required options for GLFW
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+//    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+//    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+//    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+//    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+//    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
-    glfwMakeContextCurrent(window);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+//    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", NULL, NULL);
+//    glfwMakeContextCurrent(window);
+//    if (window == NULL)
+//    {
+//        std::cout << "Failed to create GLFW window" << std::endl;
+//        glfwTerminate();
+//        return -1;
+//    }
     
     // Set the required callback functions
-    glfwSetKeyCallback(window, key_callback);
+//    glfwSetKeyCallback(window, key_callback);
     
     // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
-    glewExperimental = GL_TRUE;
+//    glewExperimental = GL_TRUE;
     // Initialize GLEW to setup the OpenGL Function pointers
-    if (glewInit() != GLEW_OK)
-    {
-        std::cout << "Failed to initialize GLEW" << std::endl;
-        return -1;
-    }
+//    if (glewInit() != GLEW_OK)
+//    {
+//        std::cout << "Failed to initialize GLEW" << std::endl;
+//        return -1;
+//    }
     
-    int fbwidth, fbheight;
-    glfwGetFramebufferSize(window,
-                           &fbwidth,
-                           &fbheight) ;
+//    int fbwidth, fbheight;
+//    glfwGetFramebufferSize(window,
+//                           &fbwidth,
+//                           &fbheight) ;
     // Define the viewport dimensions
-    glViewport(0, 0, fbwidth, fbheight);
+//    glViewport(0, 0, fbwidth, fbheight);
     
-	Shader ourShader("./src/shader.vert", "./src/shader.frag");
+//	Shader ourShader("./src/shader.vert", "./src/shader.frag");
 	
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
@@ -104,56 +88,64 @@ int main()
     
     glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
     
+    struct cudaGraphicsResource *cudaVBOres;
+    
+    //Register VBO with CUDA
+    cuGraphicsGLRegisterBuffer(cudaVBOres,
+                               *VBO,
+                               CU_GRAPHICS_REGISTER_FLAGS_NONE );
+    
     // Uncommenting this call will result in wireframe polygons.
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	float offset = 0.1;
-	
     // Game loop
-    while (!glfwWindowShouldClose(window))
-    {
+//    while (!glfwWindowShouldClose(window))
+//    {
         // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
-        glfwPollEvents();
+//        glfwPollEvents();
         
         // Render
         // Clear the colorbuffer
 //        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+//        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT);
         
-        ourShader.Use();
+//        ourShader.Use();
 		
 		// Update the uniform color
 		GLfloat timeValue = glfwGetTime();
-		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
-		glUniform4f(glGetUniformLocation(ourShader.Program, "ourColor"), 0.0f, greenValue, 0.0f, 1.0f);
+//		GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
+//		glUniform4f(glGetUniformLocation(ourShader.Program, "ourColor"), 0.0f, greenValue, 0.0f, 1.0f);
 		
-		offset += 0.01;
-		if (offset > 1.5) {
-			offset = -1.5;
-		}
-		glUniform1f(glGetUniformLocation(ourShader.Program, "offset"), offset );
+        //Map OpenGL buffer object for writing from CUDA
+        float3 *d_pos;
+        cudaGLMapBufferObject((void**)&d_pos, VBO);
 		
-        glBindVertexArray(VAO);
+        moveParticles<<< 1, 4 >>>( d_pos, timeValue, 4 );
+        
+        //Unmap buffer object
+        cudaGLUnmapBufferObject(VBO);
+        
+//        glBindVertexArray(VAO);
 //        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glPointSize(10.0f);//set point size to 10 pixels
+//        glPointSize(10.0f);//set point size to 10 pixels
 //        glDrawElements(GL_POINTS, 6, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_POINTS, 0, 4);
-        glBindVertexArray(0);
+//        glDrawArrays(GL_POINTS, 0, 4);
+//        glBindVertexArray(0);
 //        glBindBuffer(GL_ARRAY_BUFFER, 0);
         
-        computeFPS(window);
+//        computeFPS(window);
         
         // Swap the screen buffers
-        glfwSwapBuffers(window);
-    }
+//        glfwSwapBuffers(window);
+//    }
     
     /// Properly de-allocate all resources once they've outlived their purpose
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     // Terminate GLFW, clearing any resources allocated by GLFW.
-    glfwTerminate();
+//    glfwTerminate();
     return 0;
 }
 

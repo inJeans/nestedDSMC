@@ -16,7 +16,7 @@ WARN_STRING=$(WARN_COLOR)[WARNINGS]$(NO_COLOR)
 
 # Common binaries
 GCC   ?= g++
-CLANG ?= /usr/bin/clang
+CLANG ?= /usr/bin/clang++
 
 UNAME_S := $(shell uname -s)
 
@@ -62,17 +62,24 @@ debug: $(EXEC)
 profile: NVCCFLAGS += -pg
 profile: $(EXEC)
 
-$(EXEC): $(addprefix $(OBJDIR), main.o shader.o)
+$(EXEC): $(addprefix $(OBJDIR), main.o shader.o moveAtoms.o)
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Linker'
-	clang++ -stdlib=libc++ -o $@ $(INCLUDE) $^ $(LIB) -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+	clang++ -v -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -stdlib=libstdc++ -lcudart -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 
-$(OBJDIR)%.o: $(SRCDIR)%.cpp
+#$(OBJDIR)%.o: $(SRCDIR)%.cpp
+#	@echo 'Building file: $<'
+#	@echo 'Invoking: clang Compiler'
+#	clang++ -stdlib=libc++ $(INCLUDE) $(CUDA_INC) -o $@ -c $?
+#	@echo "Finished building: $< $(OK_STRING)"
+#	@echo ' '
+
+$(OBJDIR)%.o: $(SRCDIR)%.c*
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
-	clang++ -stdlib=libc++ $(INCLUDE) -o $@ -c $?
+	$(NVCC) $(NVCCFLAGS) $(INCLUDE) -v -o $@ -c $?
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 
