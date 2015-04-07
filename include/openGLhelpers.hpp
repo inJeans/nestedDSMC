@@ -25,21 +25,27 @@
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 
+#include "declareHostConstants.h"
+#include "declareHostParameters.h"
+
 #include "Shader.hpp"
-#include "systemParameters.h"
 
 GLFWwindow* initGL( void );
 
-void createVBO(GLuint *VBO,
-			   GLuint *VAO,
-			   struct cudaGraphicsResource **VBO_res);
+void createPBO(GLuint *PBO,
+			   GLuint *PAO,
+			   struct cudaGraphicsResource **PBO_res);
+
+void createCBO(GLuint *CBO,
+			   GLuint *CAO,
+			   struct cudaGraphicsResource **CBO_res);
 
 void renderParticles(GLuint *VAO,
 					 Shader miShader);
 
-void deleteVBO(GLuint *VBO,
-			   GLuint *VAO,
-			   struct cudaGraphicsResource *VBO_res);
+void deleteBO(GLuint *BO,
+			  GLuint *AO,
+			  struct cudaGraphicsResource *BO_res);
 
 void computeFPS(GLFWwindow* window,
 				int frameCount);

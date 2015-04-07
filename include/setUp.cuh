@@ -15,17 +15,15 @@
 #include <cuda.h>
 #include <curand_kernel.h>
 
-#include "systemParameters.h"
-#include "vectorMath.cuh"
+#include "moveAtoms.cuh"
 
 #define NUM_THREADS 256
-
-__device__ double d_pi = 6.2831853072;
 
 void h_initRNG(curandState_t *d_rngStates,
 			   int sizeOfRNG);
 void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 						   double3 *d_vel,
+						   double3 *d_acc,
 						   int      numberOfAtoms,
 						   curandState_t *d_rngStates);
 
@@ -33,10 +31,18 @@ __global__ void d_initRNG(curandState_t *rngState,
 						  int numberOfAtoms);
 __global__ void d_generateInitialDist(double3 *pos,
 									  double3 *vel,
+									  double3 *acc,
 									  int      numberOfAtoms,
 									  curandState_t *rngState);
 
-__device__ double3 createPointOnCircle(int atom,
-									   int numberOfAtoms);
+__device__ double3 getThermalPosition(double Temp,
+									  curandState_t *rngState);
+
+__device__ double3 getThermalVelocity(double Temp,
+									  curandState_t *rngState);
+
+__device__ double3 getGaussianPoint(double mean,
+									double std,
+									curandState_t *rngState);
 
 #endif /* defined(__nestedDSMC__setUp__) */

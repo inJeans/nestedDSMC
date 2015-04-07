@@ -7,17 +7,28 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		1D1D7D1E1AD2054E00B9721D /* magneticField.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = magneticField.cu; path = src/magneticField.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D1D7D1F1AD20A8000B9721D /* magneticField.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = magneticField.cuh; path = include/magneticField.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D1D7D201AD20F2900B9721D /* declareHostConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = declareHostConstants.h; path = include/declareHostConstants.h; sourceTree = "<group>"; };
+		1D1D7D211AD20F3E00B9721D /* defineDeviceConstants.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = defineDeviceConstants.cuh; path = include/defineDeviceConstants.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D1D7D221AD2100200B9721D /* declareDeviceConstants.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = declareDeviceConstants.cuh; path = include/declareDeviceConstants.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D1D7D231AD2110D00B9721D /* defineHostConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = defineHostConstants.h; path = include/defineHostConstants.h; sourceTree = "<group>"; };
+		1D1D7D241AD211AA00B9721D /* defineHostParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = defineHostParameters.h; path = include/defineHostParameters.h; sourceTree = "<group>"; };
+		1D1D7D251AD2126900B9721D /* declareDeviceParameters.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = declareDeviceParameters.cuh; path = include/declareDeviceParameters.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D1D7D261AD2128C00B9721D /* defineDeviceParameters.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = defineDeviceParameters.cuh; path = include/defineDeviceParameters.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D296DAD1AD395A6005DEA59 /* openGLKernels.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = openGLKernels.cu; path = src/openGLKernels.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D296DAE1AD3BDBE005DEA59 /* openGLKernels.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = openGLKernels.cuh; path = include/openGLKernels.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D43E4921AC3D72E005DC164 /* shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shader.cpp; path = src/shader.cpp; sourceTree = "<group>"; };
 		1D43E4941AC3D8A9005DC164 /* shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.vert; path = src/shader.vert; sourceTree = "<group>"; };
 		1D43E4951AC3D8C2005DC164 /* shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shader.frag; path = src/shader.frag; sourceTree = "<group>"; };
 		1D43E4961AC3DA94005DC164 /* shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = shader.hpp; path = include/shader.hpp; sourceTree = "<group>"; };
 		1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = openGLhelpers.cpp; path = src/openGLhelpers.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = openGLhelpers.hpp; path = include/openGLhelpers.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		1D6DAB1E1ACE34F0001A6A8D /* systemParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = systemParameters.h; path = include/systemParameters.h; sourceTree = "<group>"; };
+		1D6DAB1E1ACE34F0001A6A8D /* declareHostParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = declareHostParameters.h; path = include/declareHostParameters.h; sourceTree = "<group>"; };
 		1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = vectorMath.cuh; path = include/vectorMath.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB211ACE7B2B001A6A8D /* setUp.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cu; path = src/setUp.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cuh; path = include/setUp.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		44F0D8001AC17479000458FA /* main.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cu; path = src/main.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		44F0D8001AC17479000458FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
 		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8071AC8A896000458FA /* moveAtoms.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = moveAtoms.cu; path = src/moveAtoms.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -37,9 +48,11 @@
 		44F0D8031AC1764E000458FA /* src */ = {
 			isa = PBXGroup;
 			children = (
-				44F0D8001AC17479000458FA /* main.cu */,
+				44F0D8001AC17479000458FA /* main.cpp */,
 				1D6DAB211ACE7B2B001A6A8D /* setUp.cu */,
 				44F0D8071AC8A896000458FA /* moveAtoms.cu */,
+				1D1D7D1E1AD2054E00B9721D /* magneticField.cu */,
+				1D296DAD1AD395A6005DEA59 /* openGLKernels.cu */,
 				1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */,
 				1D43E4921AC3D72E005DC164 /* shader.cpp */,
 				1D43E4941AC3D8A9005DC164 /* shader.vert */,
@@ -51,10 +64,19 @@
 		44F0D8041AC1765F000458FA /* include */ = {
 			isa = PBXGroup;
 			children = (
-				1D6DAB1E1ACE34F0001A6A8D /* systemParameters.h */,
+				1D6DAB1E1ACE34F0001A6A8D /* declareHostParameters.h */,
+				1D1D7D251AD2126900B9721D /* declareDeviceParameters.cuh */,
+				1D1D7D241AD211AA00B9721D /* defineHostParameters.h */,
+				1D1D7D261AD2128C00B9721D /* defineDeviceParameters.cuh */,
+				1D1D7D201AD20F2900B9721D /* declareHostConstants.h */,
+				1D1D7D221AD2100200B9721D /* declareDeviceConstants.cuh */,
+				1D1D7D231AD2110D00B9721D /* defineHostConstants.h */,
+				1D1D7D211AD20F3E00B9721D /* defineDeviceConstants.cuh */,
 				44F0D8051AC177DF000458FA /* main.cuh */,
 				1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */,
 				44F0D8081AC8A8D8000458FA /* moveAtoms.cuh */,
+				1D1D7D1F1AD20A8000B9721D /* magneticField.cuh */,
+				1D296DAE1AD3BDBE005DEA59 /* openGLKernels.cuh */,
 				1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */,
 				1D43E4961AC3DA94005DC164 /* shader.hpp */,
 				1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */,

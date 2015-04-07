@@ -9,6 +9,8 @@
 #ifndef CUDADSMC_vectorMath_cuh
 #define CUDADSMC_vectorMath_cuh
 
+#include <math.h>
+#include <cuda.h>
 #include <cuComplex.h>
 // Make it easy to say double complex type
 typedef double2 zomplex;
@@ -181,12 +183,12 @@ static __inline__ __device__ int2 operator+ ( int a, int2 b )
 
 #pragma mark - Vector Functions
 
-static __inline __device__ double dot( double3 a, double3 b )
+static __inline __device__ __host__ double dot( double3 a, double3 b )
 {
     return a.x*b.x + a.y*b.y + a.z*b.z ;
 }
 
-static __inline__ __device__ double length( double3 v )
+static __inline__ __device__ __host__ double length( double3 v )
 {
     return sqrt( dot(v,v) );
 }

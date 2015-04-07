@@ -26,7 +26,7 @@ ifeq ($(UNAME_S),Darwin) #If building on an OSX system
 	CUDA_LIB = -L/Developer/NVIDIA/CUDA-7.0/lib
 	NVCC     = $(CUDA_PATH)/bin/nvcc -ccbin $(CLANG)
 	INCLUDE = -I /usr/local/hdf5/include -I /usr/local/Cellar/glew/1.11.0/include/
-	LIB = -L /usr/local/hdf5/lib -L /usr/local/Cellar/glew/1.11.0/lib/
+	LIB = -L/usr/local/hdf5/lib -L/usr/local/Cellar/glew/1.11.0/lib/ -L/System/Library/Frameworks/OpenGL.framework/Libraries
 else                     #If building on a Linux system
 	CUDA_INC = -I/usr/local/cuda-5.5/include
 	UNAME_P := $(shell uname -p)
@@ -41,7 +41,8 @@ else                     #If building on a Linux system
 endif
 
 #NVCCFLAGS = -m 64 --relocatable-device-code=true -arch=compute_30 -code=sm_30,compute_30
-NVCCFLAGS = -m 64 --relocatable-device-code=false -arch=compute_30 -code=sm_30,compute_30
+#NVCCFLAGS = -m 64 -arch=compute_30 -code=sm_30,compute_30
+NVCCFLAGS = -m 64 -arch=sm_35
 
 BUILDDIR = bin/
 OBJDIR   = $(BUILDDIR)obj/
@@ -62,24 +63,31 @@ debug: $(EXEC)
 profile: NVCCFLAGS += -pg
 profile: $(EXEC)
 
-$(EXEC): $(addprefix $(OBJDIR), main.o setUp.o moveAtoms.o openGLhelpers.o shader.o)
-	@echo 'Building file: $<'
+$(EXEC): $(addprefix $(OBJDIR), gpuCode.o main.o setUp.o moveAtoms.o magneticField.o openGLKernels.o openGLhelpers.o shader.o)
+	@echo 'Building file: $@'
 	@echo 'Invoking: NVCC Linker'
-	clang++ -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -lc++ -lcudart -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
-	@echo "Finished building: $< $(OK_STRING)"
+	clang++ -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -lc++ -lcudart -lcudadevrt -lcurand -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+	@echo "Finished building: $@ $(OK_STRING)"
+	@echo ' '
+
+$(OBJDIR)gpuCode.o: $(addprefix $(OBJDIR), setUp.o moveAtoms.o magneticField.o openGLKernels.o)
+	@echo 'Linking device object files: $@'
+	@echo 'Invoking: NVCC Linker'
+	$(NVCC) $(NVCCFLAGS) -dlink -o $@ $^
+	@echo "Finished linking: $@ $(OK_STRING)"
 	@echo ' '
 
 $(OBJDIR)%.o: $(SRCDIR)%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: clang Compiler'
-	clang++ -lc++ $(INCLUDE) $(CUDA_INC) -o $@ -c $?
+	clang++ $(INCLUDE) $(CUDA_INC) -o $@ -c $?
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 
 $(OBJDIR)%.o: $(SRCDIR)%.cu
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
-	$(NVCC) -v $(NVCCFLAGS) $(INCLUDE) -o $@ -c $? -D CUDA7
+	$(NVCC) $(NVCCFLAGS) -x cu $(INCLUDE) -o $@ -dc $? -D CUDA7
 	@echo "Finished building: $< $(OK_STRING)"
 	@echo ' '
 

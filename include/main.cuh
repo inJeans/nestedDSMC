@@ -27,9 +27,12 @@
 #include <curand_kernel.h>
 
 // Other includes
+#include "defineHostParameters.h"
+#include "defineHostConstants.h"
 #include "Shader.hpp"
 #include "setUp.cuh"
 #include "moveAtoms.cuh"
+#include "openGLkernels.cuh"
 #include "openGLhelpers.hpp"
 
 // Function prototypes

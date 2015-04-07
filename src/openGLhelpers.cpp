@@ -8,6 +8,9 @@
 
 #include "openGLhelpers.hpp"
 
+#include "declareHostConstants.h"
+#include "declareHostParameters.h"
+
 //The steps are:
 //1. Create an empty vertex buffer object (VBO)
 //2. Register the VBO with Cuda
@@ -28,7 +31,7 @@ GLFWwindow* initGL( void )
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 	
 	// Create a GLFWwindow object that we can use for GLFW's functions
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
@@ -63,24 +66,24 @@ GLFWwindow* initGL( void )
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//! Create VBO
+//! Create PBO
 ////////////////////////////////////////////////////////////////////////////////
-void createVBO(GLuint *VBO,
+void createPBO(GLuint *PBO,
 			   GLuint *VAO,
-			   struct cudaGraphicsResource **VBO_res)
+			   struct cudaGraphicsResource **PBO_res)
 {
-	assert(VBO);
+	assert(PBO);
 	assert(VAO);
 	
 	// create buffer object
 	glGenVertexArrays(1,
 					  VAO);
 	glGenBuffers(1,
-				 VBO);
+				 PBO);
 	
 	glBindVertexArray(*VAO);
 	glBindBuffer(GL_ARRAY_BUFFER,
-				 *VBO);
+				 *PBO);
 	// initialize buffer object
 	unsigned int size = NUMBER_OF_ATOMS * 3 * sizeof(double);
 	glBufferData(GL_ARRAY_BUFFER,
@@ -96,8 +99,47 @@ void createVBO(GLuint *VBO,
 	glBindVertexArray(0);
 	
 	// register this buffer object with CUDA
-	cudaGraphicsGLRegisterBuffer(VBO_res,
-								 *VBO,
+	cudaGraphicsGLRegisterBuffer(PBO_res,
+								 *PBO,
+								 CU_GRAPHICS_REGISTER_FLAGS_NONE);
+	
+	return;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//! Create CBO
+////////////////////////////////////////////////////////////////////////////////
+void createCBO(GLuint *CBO,
+			   GLuint *VAO,
+			   struct cudaGraphicsResource **CBO_res)
+{
+	assert(CBO);
+	assert(VAO);
+	
+	// create buffer object
+	glGenBuffers(1,
+				 CBO);
+	
+	glBindVertexArray(*VAO);
+	glBindBuffer(GL_ARRAY_BUFFER,
+				 *CBO);
+	// initialize buffer object
+	unsigned int size = NUMBER_OF_ATOMS * 4 * sizeof(float);
+	glBufferData(GL_ARRAY_BUFFER,
+				 size,
+				 0,
+				 GL_DYNAMIC_DRAW);
+	
+	// Position attribute
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	
+	// register this buffer object with CUDA
+	cudaGraphicsGLRegisterBuffer(CBO_res,
+								 *CBO,
 								 CU_GRAPHICS_REGISTER_FLAGS_NONE);
 	
 	return;
@@ -115,33 +157,34 @@ void renderParticles(GLuint *VAO,
 	// Clear the colorbuffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1, 1, 1);
 	
-	// Update the uniform color
-	GLfloat timeValue = glfwGetTime();
-	GLfloat greenValue = (sin(timeValue) / 2) + 0.5;
-	glUniform4f(glGetUniformLocation(miShader.Program, "ourColor"), 0.0f, greenValue, 0.0f, 1.0f);
+	float sigmax = 3. * 12. * kB * 20.e-6 / gs / muB / dBdz;
+	
+	glUniform1f(glGetUniformLocation(miShader.Program, "Tx"), sigmax);
 	
 	glBindVertexArray(*VAO);
-	glPointSize(1.0f);//set point size to 10 pixels
+	
 	glDrawArrays(GL_POINTS, 0, NUMBER_OF_ATOMS);
+	
 	glBindVertexArray(0);
 	
 	return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//! Delete VBO
+//! Delete BO
 ////////////////////////////////////////////////////////////////////////////////
-void deleteVBO(GLuint *VBO,
-			   GLuint *VAO,
-			   struct cudaGraphicsResource *VBO_res)
+void deleteBO(GLuint *BO,
+			  GLuint *AO,
+			  struct cudaGraphicsResource *BO_res)
 {
 	
 	// unregister this buffer object with CUDA
-	cudaGraphicsUnregisterResource(VBO_res);
+	cudaGraphicsUnregisterResource(BO_res);
 	
-	glDeleteVertexArrays(1, VAO);
-	glDeleteBuffers(1, VBO);
+	glDeleteVertexArrays(1, AO);
+	glDeleteBuffers(1, BO);
 	
 	return;
 }

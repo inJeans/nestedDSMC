@@ -1,4 +1,19 @@
+//
+//  setUp.cu
+//  nestedDSMC
+//
+//  Created by Christopher Watkins on 24/03/2015.
+//
+//
+
 #include "setUp.cuh"
+
+#include "vectorMath.cuh"
+
+#include "declareHostConstants.h"
+#include "declareHostParameters.h"
+#include "defineDeviceConstants.cuh"
+#include "defineDeviceParameters.cuh"
 
 void h_initRNG(curandState_t *d_rngStates,
 			   int sizeOfRNG)
@@ -50,6 +65,7 @@ __global__ void d_initRNG(curandState_t *rngState,
 
 void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 						   double3 *d_vel,
+						   double3 *d_acc,
 						   int      numberOfAtoms,
 						   curandState_t *d_rngStates)
 {
@@ -64,7 +80,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 									   (const void *) d_generateInitialDist,
 									   0,
 									   numberOfAtoms );
-	gridSize = (NUMBER_OF_ATOMS + blockSize - 1) / blockSize;
+	gridSize = (numberOfAtoms + blockSize - 1) / blockSize;
 #else
 	int device;
 	cudaGetDevice ( &device );
@@ -89,6 +105,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 	
 	d_generateInitialDist<<<gridSize,blockSize>>>(d_pos,
 												  d_vel,
+												  d_acc,
 												  numberOfAtoms,
 												  d_rngStates);
 	
@@ -103,6 +120,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 // Kernel to generate the initial distribution
 __global__ void d_generateInitialDist(double3 *pos,
                                       double3 *vel,
+									  double3 *acc,
                                       int      numberOfAtoms,
                                       curandState_t *rngState)
 {
@@ -111,31 +129,74 @@ __global__ void d_generateInitialDist(double3 *pos,
          atom += blockDim.x * gridDim.x)
     {
         /* Copy state to local memory for efficiency */
-        curandState_t localrngState = rngState[atom];
+        curandState_t l_rngState = rngState[atom];
 		
-		pos[atom] = createPointOnCircle(atom,
-										numberOfAtoms);
+		pos[atom] = getThermalPosition(20.e-6,
+									   &l_rngState);
 		
-        vel[atom] = make_double3( 0., 0., 0. );
-        
+		vel[atom] = getThermalVelocity(20.e-6,
+									   &l_rngState);
+		
+		acc[atom] = updateAcc(pos[atom]);
+		
         // Copy state back to global memory
-        rngState[atom] = localrngState;
+        rngState[atom] = l_rngState;
 		
     }
 	
     return;
 }
 
-__device__ double3 createPointOnCircle(int atom,
-									   int numberOfAtoms)
+__device__ double3 getThermalPosition(double Temp,
+									  curandState_t *rngState)
 {
-	double3 pos = make_double3(0.,
-							   0.,
-							   0. );
+	double3 r   = make_double3( 0., 0., 0. );
+	double3 pos = make_double3( 0., 0., 0. );
 	
-	pos.x = atom*cos( 2. * d_pi * atom / numberOfAtoms ) / numberOfAtoms;
-	pos.y = atom*sin( 2. * d_pi * atom / numberOfAtoms ) / numberOfAtoms;
-	pos.z = 0.;
+	bool noAtomSelected = true;
+	while (noAtomSelected) {
+		double2 r1 = curand_normal2_double ( &rngState[0] );
+		double  r2 = curand_normal_double  ( &rngState[0] );
+		
+		double thermalWidth = 12. * d_kB * Temp / ( d_gs * d_muB * d_dBdz );
+		
+		double3 r = make_double3( r1.x, r1.y, r2 ) * 3. * thermalWidth;
+		
+		double U = -1.0 * d_gs * d_muB * absB( r );;
+		
+		double Pr = exp( U / d_kB / Temp );
+		
+		if ( curand_uniform_double ( &rngState[0] ) < Pr) {
+			pos = r;
+			noAtomSelected = false;
+		}
+	}
 	
 	return pos;
+}
+
+__device__ double3 getThermalVelocity(double Temp,
+									  curandState_t *rngState)
+{
+	double3 vel = make_double3( 0., 0., 0. );
+	
+	double V = sqrt( d_kB*Temp/d_mRb );
+	
+	vel = getGaussianPoint(0.,
+						   V,
+						   &rngState[0]);
+	
+	return vel;
+}
+
+__device__ double3 getGaussianPoint(double mean,
+									double std,
+									curandState_t *rngState)
+{
+	double2 r1 = curand_normal2_double ( &rngState[0] ) * std + mean;
+	double  r2 = curand_normal_double  ( &rngState[0] ) * std + mean;
+ 
+	double3 point = make_double3( r1.x, r1.y, r2 );
+	
+	return point;
 }

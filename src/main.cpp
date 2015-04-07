@@ -8,41 +8,49 @@
 
 #include "main.cuh"
 
-int NUMBER_OF_ATOMS = 1e3;
-int frameCount = 0;
+long unsigned int frameCount = 0;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
     std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl;
     // Init GLFW
-	GLFWwindow* window = initGL( );;
+	GLFWwindow* window = initGL( );
 	
 	Shader miShader("./src/shader.vert", "./src/shader.frag");
 	
-    struct cudaGraphicsResource *cudaVBOres;
-	// Create VBO
-	GLuint VBO, VAO;
-	createVBO(&VBO,
+	// Create Vertex Array Buffer
+	GLuint VAO;
+	
+	// Create Position Buffer Object
+	struct cudaGraphicsResource *cudaPBOres;
+	GLuint PBO;
+	createPBO(&PBO,
 			  &VAO,
-			  &cudaVBOres);
+			  &cudaPBOres);
 	
-	GLfloat oldValue = glfwGetTime();
-	
-	double dt = 0.;
+	// Create Colour Buffer Object
+    struct cudaGraphicsResource *cudaCBOres;
+	GLuint CBO;
+	createCBO(&CBO,
+			  &VAO,
+			  &cudaCBOres);
 	
 	curandState_t *d_rngStates;
 	cudaMalloc( (void **)&d_rngStates, NUMBER_OF_ATOMS*sizeof(curandState_t) );
 	
 	double3 *d_vel;
+	double3 *d_acc;
 	
 	cudaCalloc( (void **)&d_vel, NUMBER_OF_ATOMS, sizeof(double3) );
+	cudaCalloc( (void **)&d_acc, NUMBER_OF_ATOMS, sizeof(double3) );
 	
 	h_initRNG(d_rngStates,
 			  NUMBER_OF_ATOMS);
 	
-	h_generateInitialDist(&cudaVBOres,
+	h_generateInitialDist(&cudaPBOres,
 						  d_vel,
+						  d_acc,
 						  NUMBER_OF_ATOMS,
 						  d_rngStates);
 	
@@ -52,14 +60,16 @@ int main()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
 		
-		GLfloat timeValue = glfwGetTime();
+		h_moveParticles(&cudaPBOres,
+						d_vel,
+						d_acc,
+						1.e-5,
+						NUMBER_OF_ATOMS);
 		
-		dt = timeValue - oldValue;
-		
-		moveParticles(&cudaVBOres,
-					  d_vel,
-					  dt,
-					  NUMBER_OF_ATOMS);
+		h_setParticleColour(d_vel,
+							&cudaCBOres,
+							20.e-6,
+							NUMBER_OF_ATOMS);
 		
 		renderParticles(&VAO,
 						miShader);
@@ -70,19 +80,21 @@ int main()
 		frameCount++;
 		computeFPS(window,
 				   frameCount);
-		
-		oldValue = timeValue;
     }
 	
     // Properly de-allocate all resources once they've outlived their purpose
-	deleteVBO(&VBO,
-			  &VAO,
-			  cudaVBOres);
+	deleteBO(&PBO,
+			 &VAO,
+			 cudaPBOres);
+	deleteBO(&CBO,
+			 &VAO,
+			 cudaCBOres);
 	
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
 	
 	cudaFree( d_vel );
+	cudaFree( d_acc );
 	
 	cudaDeviceReset();
 	
