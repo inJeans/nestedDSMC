@@ -20,16 +20,6 @@ void h_setParticleColour(double3 *d_vel,
 						 double   T,
 						 int      numberOfAtoms)
 {
-	// Map OpenGL buffer object for writing from CUDA
-	float4 *d_col;
-	cudaGraphicsMapResources(1,
-							 cudaCBOres,
-							 0);
-	size_t num_bytes;
-	cudaGraphicsResourceGetMappedPointer((void **)&d_col,
-										 &num_bytes,
-										 *cudaCBOres);
-	
 	int blockSize;
 	int gridSize;
 	
@@ -54,15 +44,16 @@ void h_setParticleColour(double3 *d_vel,
 	blockSize = NUM_THREADS;
 #endif
 	
+	// Map OpenGL buffer object for writing from CUDA
+	float4 *d_col = mapCUDAVBOf4(cudaCBOres);
+	
 	d_setParticleColour<<<gridSize,blockSize>>>(d_vel,
 												d_col,
 												T,
 												numberOfAtoms);
 	
 	//Unmap buffer object
-	cudaGraphicsUnmapResources(1,
-							   cudaCBOres,
-							   0);
+	unmapCUDAVBO(cudaCBOres);
 	
 	return;
 }

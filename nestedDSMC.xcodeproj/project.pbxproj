@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		1D083D5A1AD50BFC00F8F2E8 /* camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = camera.cpp; path = src/camera.cpp; sourceTree = "<group>"; };
+		1D083D5B1AD50E0E00F8F2E8 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = camera.hpp; path = include/camera.hpp; sourceTree = "<group>"; };
 		1D1D7D1E1AD2054E00B9721D /* magneticField.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = magneticField.cu; path = src/magneticField.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D1D7D1F1AD20A8000B9721D /* magneticField.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = magneticField.cuh; path = include/magneticField.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D1D7D201AD20F2900B9721D /* declareHostConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = declareHostConstants.h; path = include/declareHostConstants.h; sourceTree = "<group>"; };
@@ -28,6 +30,8 @@
 		1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = vectorMath.cuh; path = include/vectorMath.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB211ACE7B2B001A6A8D /* setUp.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cu; path = src/setUp.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cuh; path = include/setUp.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1DAEDAD61AD66550000B6E51 /* numberCrunch.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = numberCrunch.cu; path = src/numberCrunch.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1DB633D71AD6660100AA0EB4 /* numberCrunch.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = numberCrunch.cuh; path = include/numberCrunch.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8001AC17479000458FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
 		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -52,9 +56,11 @@
 				1D6DAB211ACE7B2B001A6A8D /* setUp.cu */,
 				44F0D8071AC8A896000458FA /* moveAtoms.cu */,
 				1D1D7D1E1AD2054E00B9721D /* magneticField.cu */,
+				1DAEDAD61AD66550000B6E51 /* numberCrunch.cu */,
 				1D296DAD1AD395A6005DEA59 /* openGLKernels.cu */,
 				1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */,
 				1D43E4921AC3D72E005DC164 /* shader.cpp */,
+				1D083D5A1AD50BFC00F8F2E8 /* camera.cpp */,
 				1D43E4941AC3D8A9005DC164 /* shader.vert */,
 				1D43E4951AC3D8C2005DC164 /* shader.frag */,
 			);
@@ -76,9 +82,11 @@
 				1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */,
 				44F0D8081AC8A8D8000458FA /* moveAtoms.cuh */,
 				1D1D7D1F1AD20A8000B9721D /* magneticField.cuh */,
+				1DB633D71AD6660100AA0EB4 /* numberCrunch.cuh */,
 				1D296DAE1AD3BDBE005DEA59 /* openGLKernels.cuh */,
 				1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */,
 				1D43E4961AC3DA94005DC164 /* shader.hpp */,
+				1D083D5B1AD50E0E00F8F2E8 /* camera.hpp */,
 				1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */,
 			);
 			name = include;

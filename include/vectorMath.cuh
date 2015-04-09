@@ -193,9 +193,9 @@ static __inline__ __device__ __host__ double length( double3 v )
     return sqrt( dot(v,v) );
 }
 
-static __inline__ __device__ int2 double2Toint2_rd( double2 a )
-{
-	return make_int2( __double2int_rd(a.x), __double2int_rd(a.y) );
-}
+//static __inline__ __device__ int2 double2Toint2_rd( double2 a )
+//{
+//	return make_int2( __double2int_rd(a.x), __double2int_rd(a.y) );
+//}
 
 #endif

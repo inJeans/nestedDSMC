@@ -19,6 +19,19 @@
 //5. Unmap the VBO
 //6. Render the results using OpenGL
 
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+bool keys[1024];
+
+
+double firstx = 0.;
+double firsty = 0.;
+
+double xpos = 0.;
+double ypos = 0.;
+
+int fbwidth, fbheight;
+
 ////////////////////////////////////////////////////////////////////////////////
 //! Initialize GL
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +47,8 @@ GLFWwindow* initGL( void )
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 	
 	// Create a GLFWwindow object that we can use for GLFW's functions
+	char fps[256];
+	sprintf(fps, "CUDA DSMC - %i particles | %3.1f fps | T = %3.1f uK | <E> = %3.1f uK ", NUMBER_OF_ATOMS, 0., 20., 0.);
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
     glfwMakeContextCurrent(window);
     if (window == NULL)
@@ -44,7 +59,12 @@ GLFWwindow* initGL( void )
     }
 	
 	// Set the required callback functions
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window,
+					   key_callback);
+	glfwSetScrollCallback(window,
+						  scroll_callback);
+//	glfwSetMouseButtonCallback(window,
+//							   mouse_button_callback);
 	
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
     glewExperimental = GL_TRUE;
@@ -55,7 +75,7 @@ GLFWwindow* initGL( void )
 //        return -1;
     }
 	
-    int fbwidth, fbheight;
+//    int fbwidth, fbheight;
     glfwGetFramebufferSize(window,
                            &fbwidth,
                            &fbheight) ;
@@ -153,19 +173,58 @@ void renderParticles(GLuint *VAO,
 {
 	miShader.Use();
 	
+	// Camera/View transformation
+	glm::mat4 view;
+	view = camera.GetViewMatrix();
+	
+	// Projection
+	glm::mat4 projection;
+	projection = glm::perspective(camera.Zoom,
+								  (float)fbwidth/(float)fbheight,
+								  0.1f,
+								  1000.0f);
+	
+	// Calculate the model matrix for each object and pass it to shader before drawing
+	glm::mat4 model;
+	
+	// Get the uniform locations
+	GLint modelLoc = glGetUniformLocation(miShader.Program,
+										  "model");
+	GLint viewLoc  = glGetUniformLocation(miShader.Program,
+										  "view");
+	GLint projLoc  = glGetUniformLocation(miShader.Program,
+										  "projection");
+	
+	// Pass the matrices to the shader
+	glUniformMatrix4fv(viewLoc,
+					   1,
+					   GL_FALSE,
+					   glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc,
+					   1,
+					   GL_FALSE,
+					   glm::value_ptr(projection));
+	glUniformMatrix4fv(modelLoc,
+					   1,
+					   GL_FALSE,
+					   glm::value_ptr(model));
+	
 	// Render
 	// Clear the colorbuffer
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1, 1, 1);
 	
-	float sigmax = 3. * 12. * kB * 20.e-6 / gs / muB / dBdz;
+	float sigmax = 1. * 12. * h_kB * 20.e-6 / h_gs / h_muB / h_dBdz;
 	
-	glUniform1f(glGetUniformLocation(miShader.Program, "Tx"), sigmax);
+	glUniform1f(glGetUniformLocation(miShader.Program, "Tx"),
+				sigmax);
 	
 	glBindVertexArray(*VAO);
 	
-	glDrawArrays(GL_POINTS, 0, NUMBER_OF_ATOMS);
+	glPointSize(2.0f);
+	glDrawArrays(GL_POINTS,
+				 0,
+				 NUMBER_OF_ATOMS);
 	
 	glBindVertexArray(0);
 	
@@ -192,6 +251,30 @@ void deleteBO(GLuint *BO,
 ////////////////////////////////////////////////////////////////////////////////
 //! Keyboard events handler
 ////////////////////////////////////////////////////////////////////////////////
+// Moves/alters the camera positions based on user input
+void Do_Movement(GLfloat deltaTime)
+{
+	// Camera controls
+	if(keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
+	{
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	}
+	else if(keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
+	{
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	}
+	else if(keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
+	{
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	}
+	else if(keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
+	{
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+	
+	return;
+}
+
 void key_callback(GLFWwindow* window,
 				  int key,
 				  int scancode,
@@ -200,16 +283,113 @@ void key_callback(GLFWwindow* window,
 {
 	std::cout << key << std::endl;
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+			keys[key] = true;
+		else if (action == GLFW_RELEASE)
+			keys[key] = false;
+	}
+}
+
+//void mouse_button_callback(GLFWwindow* window,
+//						   int button,
+//						   int action,
+//						   int mods)
+//{
+//	
+//	
+//	if(button == GLFW_MOUSE_BUTTON_LEFT &&
+//		action == GLFW_PRESS)
+//	{
+//		glfwGetCursorPos(window, &firstx, &firsty);
+//		std::cout << "First press x = " << firstx << " xpos = " << xpos << std::endl;
+//	}
+//	
+//	if(button == GLFW_MOUSE_BUTTON_LEFT &&
+//	   action == GLFW_RELEASE)
+//	{
+//		glfwGetCursorPos(window, &xpos, &ypos);
+//		
+//		GLfloat xoffset = -xpos + firstx;
+//		GLfloat yoffset = ypos - firsty;
+//
+//		std::cout << "Release x = " << xpos << " first x = " << firstx << std::endl;
+//		
+//		firstx = 0.;
+//		firsty = 0.;
+//		
+//		xpos = 0.;
+//		ypos = 0.;
+//		
+//		camera.ProcessMouseMovement(xoffset,
+//									yoffset);
+//	}
+//	
+//	return;
+//}
+
+void scroll_callback(GLFWwindow* window,
+					 double xoffset,
+					 double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
 }
 
 void computeFPS(GLFWwindow* window,
-				int frameCount)
+				int         numberOfAtoms,
+				double      T,
+				double      E,
+				int         frameCount)
 {
 	float avgFPS = frameCount / glfwGetTime();
 	
 	char fps[256];
-	sprintf(fps, "Cuda GL Interop (VBO): %3.1f fps", avgFPS);
+	sprintf(fps, "CUDA DSMC - %i particles | %3.1f fps | T = %3.1f uK | <E> = %3.1f uK ", numberOfAtoms, avgFPS, T*1.e6, E*1.e6/h_kB);
 	
 	glfwSetWindowTitle( window, fps );
+}
+
+double3* mapCUDAVBOd3(struct cudaGraphicsResource **cudaVBOres)
+{
+	// Map OpenGL buffer object for writing from CUDA
+	double3 *d_ptr;
+	cudaGraphicsMapResources(1,
+							 cudaVBOres,
+							 0);
+	size_t num_bytes;
+	cudaGraphicsResourceGetMappedPointer((void **)&d_ptr,
+										 &num_bytes,
+										 *cudaVBOres);
+
+	return d_ptr;
+}
+
+float4* mapCUDAVBOf4(struct cudaGraphicsResource **cudaVBOres)
+{
+	// Map OpenGL buffer object for writing from CUDA
+	float4 *d_ptr;
+	cudaGraphicsMapResources(1,
+							 cudaVBOres,
+							 0);
+	size_t num_bytes;
+	cudaGraphicsResourceGetMappedPointer((void **)&d_ptr,
+										 &num_bytes,
+										 *cudaVBOres);
+	
+	return d_ptr;
+}
+
+void unmapCUDAVBO(struct cudaGraphicsResource **cudaVBOres)
+{
+	//Unmap buffer object
+	cudaGraphicsUnmapResources(1,
+							   cudaVBOres,
+							   0);
+	
+	return;
 }

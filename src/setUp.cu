@@ -63,7 +63,7 @@ __global__ void d_initRNG(curandState_t *rngState,
 	return;
 }
 
-void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
+void h_generateInitialDist(struct cudaGraphicsResource **cudaPBOres,
 						   double3 *d_vel,
 						   double3 *d_acc,
 						   int      numberOfAtoms,
@@ -94,14 +94,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 #endif
 	
 	// Map OpenGL buffer object for writing from CUDA
-	double3 *d_pos;
-	cudaGraphicsMapResources(1,
-							 cudaVBOres,
-							 0);
-	size_t num_bytes;
-	cudaGraphicsResourceGetMappedPointer((void **)&d_pos,
-										 &num_bytes,
-										 *cudaVBOres);
+	double3 *d_pos = mapCUDAVBOd3(cudaPBOres);
 	
 	d_generateInitialDist<<<gridSize,blockSize>>>(d_pos,
 												  d_vel,
@@ -110,9 +103,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
 												  d_rngStates);
 	
 	//Unmap buffer object
-	cudaGraphicsUnmapResources(1,
-							   cudaVBOres,
-							   0);
+	unmapCUDAVBO(cudaPBOres);
 	
 	return;
 }
@@ -160,9 +151,9 @@ __device__ double3 getThermalPosition(double Temp,
 		
 		double thermalWidth = 12. * d_kB * Temp / ( d_gs * d_muB * d_dBdz );
 		
-		double3 r = make_double3( r1.x, r1.y, r2 ) * 3. * thermalWidth;
+		double3 r = make_double3( r1.x, r1.y, r2 ) * 4. * thermalWidth;
 		
-		double U = -1.0 * d_gs * d_muB * absB( r );;
+		double U = -0.5 * d_gs * d_muB * absB( r );;
 		
 		double Pr = exp( U / d_kB / Temp );
 		

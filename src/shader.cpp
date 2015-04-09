@@ -8,7 +8,8 @@
 
 #include "shader.hpp"
 
-Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
+Shader::Shader(const GLchar* vertexPath,
+			   const GLchar* fragmentPath)
 {
 	// 1. Retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
@@ -88,4 +89,6 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 void Shader::Use()
 {
 	glUseProgram(this->Program);
+	
+	return;
 }

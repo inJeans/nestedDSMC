@@ -15,7 +15,7 @@ extern int NUMBER_OF_ATOMS;
 // Trapping Parameters                //
 ////////////////////////////////////////
 
-extern double dBdz;
+extern double h_dBdz;
 
 
 #endif /* defined(__nestedDSMC__declareHostParameters__) */

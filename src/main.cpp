@@ -54,16 +54,30 @@ int main()
 						  NUMBER_OF_ATOMS,
 						  d_rngStates);
 	
+	// Camera
+	glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+	
+	GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
+	GLfloat lastFrame = 0.0f;  	// Time of last frame
+	
     // Game loop
-    while (!glfwWindowShouldClose(window))
+//    while (!glfwWindowShouldClose(window))
+	for (int i=0; i < 1e3; i++)
     {
+		GLfloat currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
+		Do_Movement(deltaTime);
 		
 		h_moveParticles(&cudaPBOres,
 						d_vel,
 						d_acc,
-						1.e-5,
+						1.e-4*deltaTime,
 						NUMBER_OF_ATOMS);
 		
 		h_setParticleColour(d_vel,
@@ -77,8 +91,19 @@ int main()
         // Swap the screen buffers
         glfwSwapBuffers(window);
 		
+		double Ek = calculateKineticEnergy(d_vel,
+										   NUMBER_OF_ATOMS);
+		double Ep = calculatePotentialEnergy(&cudaPBOres,
+											 NUMBER_OF_ATOMS);
+		
+		double T = calculateTemperature(Ek,
+										NUMBER_OF_ATOMS);
+		
 		frameCount++;
 		computeFPS(window,
+				   NUMBER_OF_ATOMS,
+				   T,
+				   (Ep + Ek) / NUMBER_OF_ATOMS,
 				   frameCount);
     }
 	

@@ -15,7 +15,7 @@ int NUMBER_OF_ATOMS = 1e4;
 // Trapping Parameters                //
 ////////////////////////////////////////
 
-double dBdz = 2.5;
+double h_dBdz = 2.5;
 
 
 #endif /* defined(__nestedDSMC__defineHostParameters__) */

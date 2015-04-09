@@ -25,7 +25,7 @@ ifeq ($(UNAME_S),Darwin) #If building on an OSX system
 	CUDA_INC = -I/Developer/NVIDIA/CUDA-7.0/include
 	CUDA_LIB = -L/Developer/NVIDIA/CUDA-7.0/lib
 	NVCC     = $(CUDA_PATH)/bin/nvcc -ccbin $(CLANG)
-	INCLUDE = -I /usr/local/hdf5/include -I /usr/local/Cellar/glew/1.11.0/include/
+	INCLUDE = -I /usr/local/hdf5/include -I /usr/local/Cellar/glew/1.11.0/include/ -I/usr/local/Cellar/glm/0.9.6.1/include
 	LIB = -L/usr/local/hdf5/lib -L/usr/local/Cellar/glew/1.11.0/lib/ -L/System/Library/Frameworks/OpenGL.framework/Libraries
 else                     #If building on a Linux system
 	CUDA_INC = -I/usr/local/cuda-5.5/include
@@ -60,17 +60,17 @@ debug: NVCCFLAGS += -g -G
 debug: clean
 debug: $(EXEC)
 
-profile: NVCCFLAGS += -pg
+profile: NVCCFLAGS += -pg -lineinfo
 profile: $(EXEC)
 
-$(EXEC): $(addprefix $(OBJDIR), gpuCode.o main.o setUp.o moveAtoms.o magneticField.o openGLKernels.o openGLhelpers.o shader.o)
+$(EXEC): $(addprefix $(OBJDIR), gpuCode.o main.o setUp.o moveAtoms.o magneticField.o numberCrunch.o openGLKernels.o openGLhelpers.o shader.o camera.o)
 	@echo 'Building file: $@'
 	@echo 'Invoking: NVCC Linker'
 	clang++ -o $@ $(INCLUDE) $^ $(LIB) $(CUDA_LIB) -lc++ -lcudart -lcudadevrt -lcurand -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 	@echo "Finished building: $@ $(OK_STRING)"
 	@echo ' '
 
-$(OBJDIR)gpuCode.o: $(addprefix $(OBJDIR), setUp.o moveAtoms.o magneticField.o openGLKernels.o)
+$(OBJDIR)gpuCode.o: $(addprefix $(OBJDIR), setUp.o moveAtoms.o magneticField.o numberCrunch.o openGLKernels.o)
 	@echo 'Linking device object files: $@'
 	@echo 'Invoking: NVCC Linker'
 	$(NVCC) $(NVCCFLAGS) -dlink -o $@ $^

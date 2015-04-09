@@ -14,6 +14,7 @@
 #include <cuda.h>
 
 #include "magneticField.cuh"
+#include "openGLHelpers.hpp"
 
 void h_moveParticles(struct cudaGraphicsResource **vbo_resource,
 					 double3 *d_vel,

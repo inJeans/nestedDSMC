@@ -16,6 +16,7 @@
 #include <curand_kernel.h>
 
 #include "moveAtoms.cuh"
+#include "openGLHelpers.hpp"
 
 #define NUM_THREADS 256
 

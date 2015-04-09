@@ -13,32 +13,47 @@
 #include "declareDeviceConstants.cuh"
 #include "declareDeviceParameters.cuh"
 
-void h_moveParticles(struct cudaGraphicsResource **cudaVBOres,
+void h_moveParticles(struct cudaGraphicsResource **cudaPBOres,
 					 double3 *d_vel,
 					 double3 *d_acc,
 					 double timeValue,
 					 int numberOfAtoms)
 {
-	// Map OpenGL buffer object for writing from CUDA
-	double3 *d_pos;
-	cudaGraphicsMapResources(1,
-							 cudaVBOres,
-							 0);
-	size_t num_bytes;
-	cudaGraphicsResourceGetMappedPointer((void **)&d_pos,
-										 &num_bytes,
-										 *cudaVBOres);
+	int blockSize;
+	int gridSize;
 	
-	d_moveParticles<<< 1, 4 >>>(d_pos,
-								d_vel,
-								d_acc,
-								timeValue,
-								numberOfAtoms);
+#ifdef CUDA7
+	int minGridSize;
+	
+	cudaOccupancyMaxPotentialBlockSize(&minGridSize,
+									   &blockSize,
+									   (const void *) d_moveParticles,
+									   0,
+									   numberOfAtoms );
+	gridSize = (numberOfAtoms + blockSize - 1) / blockSize;
+#else
+	int device;
+	cudaGetDevice ( &device );
+	int numSMs;
+	cudaDeviceGetAttribute(&numSMs,
+						   cudaDevAttrMultiProcessorCount,
+						   device);
+	
+	gridSize = 256*numSMs;
+	blockSize = NUM_THREADS;
+#endif
+	
+	// Map OpenGL buffer object for writing from CUDA
+	double3 *d_pos = mapCUDAVBOd3(cudaPBOres);
+	
+	d_moveParticles<<<gridSize,blockSize>>>(d_pos,
+											d_vel,
+											d_acc,
+											timeValue,
+											numberOfAtoms);
 	
 	//Unmap buffer object
-	cudaGraphicsUnmapResources(1,
-							   cudaVBOres,
-							   0);
+	unmapCUDAVBO(cudaPBOres);
 	
 	return;
 }
@@ -52,24 +67,18 @@ __global__ void d_moveParticles(double3 *pos,
     for (int atom = blockIdx.x * blockDim.x + threadIdx.x;
          atom < numberOfAtoms;
          atom += blockDim.x * gridDim.x)
-//    {
-//		double3 acc = -1.0 * pos[atom];
-//		
-//		vel[atom] = vel[atom] + acc * dt;
-//		pos[atom] = pos[atom] + vel[atom] * dt;
-//    }
 	{
 		double3 l_pos = pos[atom];
 		double3 l_vel = vel[atom];
 		double3 l_acc = acc[atom];
 		
-		//        for (int i=0; i<d_loopsPerCollision; i++) {
-		velocityVerletUpdate(&l_pos,
-							 &l_vel,
-							 &l_acc,
-							 dt);
-		//        }
-		
+		for (int i=0; i<10; i++) {
+			velocityVerletUpdate(&l_pos,
+								 &l_vel,
+								 &l_acc,
+								 dt);
+		}
+	
 		pos[atom] = l_pos;
 		vel[atom] = l_vel;
 		acc[atom] = l_acc;

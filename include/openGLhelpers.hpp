@@ -21,6 +21,12 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+// GLM Mathematics
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// CUDA
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
@@ -29,6 +35,7 @@
 #include "declareHostParameters.h"
 
 #include "Shader.hpp"
+#include "Camera.hpp"
 
 GLFWwindow* initGL( void );
 
@@ -47,13 +54,32 @@ void deleteBO(GLuint *BO,
 			  GLuint *AO,
 			  struct cudaGraphicsResource *BO_res);
 
-void computeFPS(GLFWwindow* window,
-				int frameCount);
+void Do_Movement(GLfloat deltaTime);
 
 void key_callback(GLFWwindow* window,
 				  int key,
 				  int scancode,
 				  int action,
 				  int mode);
+
+//void mouse_button_callback(GLFWwindow* window,
+//						   int button,
+//						   int action,
+//						   int mods);
+
+void scroll_callback(GLFWwindow* window,
+					 double xoffset,
+					 double yoffset);
+
+void computeFPS(GLFWwindow* window,
+				int         numberOfAtoms,
+				double      T,
+				double      E,
+				int         frameCount);
+
+double3* mapCUDAVBOd3(struct cudaGraphicsResource **cudaVBOres);
+float4*  mapCUDAVBOf4(struct cudaGraphicsResource **cudaVBOres);
+
+void unmapCUDAVBO(struct cudaGraphicsResource **cudaVBOres);
 
 #endif /* defined(__nestedDSMC__openGLhelpers__) */

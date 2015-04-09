@@ -11,6 +11,8 @@
 
 #include <math.h>
 
+#include "openGLHelpers.hpp"
+
 void h_setParticleColour(double3 *d_vel,
 						 struct   cudaGraphicsResource **cudaCBOres,
 						 double   T,
