@@ -49,5 +49,14 @@ cudaError_t __cudaCalloc_err = cudaMalloc(A, (B)*C); \
 if (__cudaCalloc_err == cudaSuccess) cudaMemset(*A, 0, (B)*C); \
 } while (0)
 
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+    if (code != cudaSuccess)
+    {
+        fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
 
 #endif /* defined(__nestedDSMC__main__) */

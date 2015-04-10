@@ -42,7 +42,7 @@ endif
 
 #NVCCFLAGS = -m 64 --relocatable-device-code=true -arch=compute_30 -code=sm_30,compute_30
 #NVCCFLAGS = -m 64 -arch=compute_30 -code=sm_30,compute_30
-NVCCFLAGS = -m 64 -arch=sm_35
+NVCCFLAGS = -m 64 -arch=sm_30
 
 BUILDDIR = bin/
 OBJDIR   = $(BUILDDIR)obj/

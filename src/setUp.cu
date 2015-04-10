@@ -29,7 +29,7 @@ void h_initRNG(curandState_t *d_rngStates,
 									   (const void *) d_initRNG,
 									   0,
 									   sizeOfRNG);
-	gridSize = (NUMBER_OF_ATOMS + blockSize - 1) / blockSize;
+	gridSize = (sizeOfRNG + blockSize - 1) / blockSize;
 #else
 	int device;
 	cudaGetDevice ( &device );
@@ -41,7 +41,7 @@ void h_initRNG(curandState_t *d_rngStates,
 	gridSize = 256*numSMs;
 	blockSize = NUM_THREADS;
 #endif
-	
+	fprintf(stderr, "h_initRNG Error: %s\n", cudaGetErrorString( cudaGetLastError( ) ) );
 	d_initRNG<<<gridSize,blockSize>>>(d_rngStates,
 									  sizeOfRNG);
 	

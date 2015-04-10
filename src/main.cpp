@@ -63,8 +63,8 @@ int main()
 	GLfloat lastFrame = 0.0f;  	// Time of last frame
 	
     // Game loop
-//    while (!glfwWindowShouldClose(window))
-	for (int i=0; i < 1e3; i++)
+    while (!glfwWindowShouldClose(window))
+//	for (int i=0; i < 1e3; i++)
     {
 		GLfloat currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;

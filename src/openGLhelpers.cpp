@@ -49,7 +49,7 @@ GLFWwindow* initGL( void )
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	char fps[256];
 	sprintf(fps, "CUDA DSMC - %i particles | %3.1f fps | T = %3.1f uK | <E> = %3.1f uK ", NUMBER_OF_ATOMS, 0., 20., 0.);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, fps, NULL, NULL);
     glfwMakeContextCurrent(window);
     if (window == NULL)
     {

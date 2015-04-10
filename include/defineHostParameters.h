@@ -9,7 +9,9 @@
 #ifndef __nestedDSMC__defineHostParameters__
 #define __nestedDSMC__defineHostParameters__
 
-int NUMBER_OF_ATOMS = 1e4;
+int NUMBER_OF_ATOMS = 5e3;
+
+int NUM_THREADS = 256;
 
 ////////////////////////////////////////
 // Trapping Parameters                //

@@ -13,6 +13,8 @@
 #include <iostream>
 #include <cuda.h>
 
+#include "declareHostParameters.h"
+
 #include "magneticField.cuh"
 #include "openGLHelpers.hpp"
 
