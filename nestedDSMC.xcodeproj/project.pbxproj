@@ -30,9 +30,16 @@
 		1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = vectorMath.cuh; path = include/vectorMath.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB211ACE7B2B001A6A8D /* setUp.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cu; path = src/setUp.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = setUp.cuh; path = include/setUp.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D7BC4391ADA3264006B6A90 /* cudaHelpers.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = cudaHelpers.cu; path = src/cudaHelpers.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1D7BC43A1ADA3383006B6A90 /* cudaHelpers.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = cudaHelpers.cuh; path = include/cudaHelpers.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1DA6B6BF1AD904CB006607B8 /* collideAtoms.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = collideAtoms.cuh; path = include/collideAtoms.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1DAEDAD61AD66550000B6E51 /* numberCrunch.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = numberCrunch.cu; path = src/numberCrunch.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1DB28CF11B51D6B800F8EFD4 /* serialCollideAtoms.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = serialCollideAtoms.c; path = src/serialCollideAtoms.c; sourceTree = "<group>"; };
+		1DB28CF21B51D6B800F8EFD4 /* serialCollideAtoms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = serialCollideAtoms.h; path = src/serialCollideAtoms.h; sourceTree = "<group>"; };
 		1DB633D71AD6660100AA0EB4 /* numberCrunch.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = numberCrunch.cuh; path = include/numberCrunch.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		44F0D8001AC17479000458FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		1DC2E2271AE387B500C9BC35 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1DFA9EE11AD88F42006190EC /* collideAtoms.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = collideAtoms.cu; path = src/collideAtoms.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		44F0D8001AC17479000458FA /* main.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cu; path = src/main.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8021AC17647000458FA /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.sh; };
 		44F0D8051AC177DF000458FA /* main.cuh */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.cuh; path = include/main.cuh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44F0D8071AC8A896000458FA /* moveAtoms.cu */ = {isa = PBXFileReference; lastKnownFileType = text; name = moveAtoms.cu; path = src/moveAtoms.cu; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -40,25 +47,37 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		1DC2E2261AE387B500C9BC35 /* CUDADSMC */ = {
+			isa = PBXGroup;
+			children = (
+				1DC2E2271AE387B500C9BC35 /* main.cpp */,
+			);
+			path = CUDADSMC;
+			sourceTree = "<group>";
+		};
 		44F0D7F81AC17422000458FA = {
 			isa = PBXGroup;
 			children = (
 				44F0D8021AC17647000458FA /* Makefile */,
 				44F0D8041AC1765F000458FA /* include */,
 				44F0D8031AC1764E000458FA /* src */,
+				1DC2E2261AE387B500C9BC35 /* CUDADSMC */,
 			);
 			sourceTree = "<group>";
 		};
 		44F0D8031AC1764E000458FA /* src */ = {
 			isa = PBXGroup;
 			children = (
-				44F0D8001AC17479000458FA /* main.cpp */,
+				44F0D8001AC17479000458FA /* main.cu */,
 				1D6DAB211ACE7B2B001A6A8D /* setUp.cu */,
 				44F0D8071AC8A896000458FA /* moveAtoms.cu */,
+				1DFA9EE11AD88F42006190EC /* collideAtoms.cu */,
+				1DB28CF11B51D6B800F8EFD4 /* serialCollideAtoms.c */,
 				1D1D7D1E1AD2054E00B9721D /* magneticField.cu */,
 				1DAEDAD61AD66550000B6E51 /* numberCrunch.cu */,
 				1D296DAD1AD395A6005DEA59 /* openGLKernels.cu */,
 				1D6DAB1C1ACE29AA001A6A8D /* openGLhelpers.cpp */,
+				1D7BC4391ADA3264006B6A90 /* cudaHelpers.cu */,
 				1D43E4921AC3D72E005DC164 /* shader.cpp */,
 				1D083D5A1AD50BFC00F8F2E8 /* camera.cpp */,
 				1D43E4941AC3D8A9005DC164 /* shader.vert */,
@@ -81,10 +100,13 @@
 				44F0D8051AC177DF000458FA /* main.cuh */,
 				1D6DAB221ACE7DF6001A6A8D /* setUp.cuh */,
 				44F0D8081AC8A8D8000458FA /* moveAtoms.cuh */,
+				1DA6B6BF1AD904CB006607B8 /* collideAtoms.cuh */,
+				1DB28CF21B51D6B800F8EFD4 /* serialCollideAtoms.h */,
 				1D1D7D1F1AD20A8000B9721D /* magneticField.cuh */,
 				1DB633D71AD6660100AA0EB4 /* numberCrunch.cuh */,
 				1D296DAE1AD3BDBE005DEA59 /* openGLKernels.cuh */,
 				1D6DAB1D1ACE2A14001A6A8D /* openGLhelpers.hpp */,
+				1D7BC43A1ADA3383006B6A90 /* cudaHelpers.cuh */,
 				1D43E4961AC3DA94005DC164 /* shader.hpp */,
 				1D083D5B1AD50E0E00F8F2E8 /* camera.hpp */,
 				1D6DAB201ACE7A3B001A6A8D /* vectorMath.cuh */,
@@ -108,6 +130,7 @@
 				en,
 			);
 			mainGroup = 44F0D7F81AC17422000458FA;
+			productRefGroup = 44F0D7F81AC17422000458FA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -119,12 +142,14 @@
 		44F0D7FD1AC17422000458FA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				New_Setting = "";
 			};
 			name = Debug;
 		};
 		44F0D7FE1AC17422000458FA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				New_Setting = "";
 			};
 			name = Release;
 		};

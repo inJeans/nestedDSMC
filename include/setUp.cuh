@@ -22,9 +22,10 @@
 
 void h_initRNG(curandState_t *d_rngStates,
 			   int sizeOfRNG);
-void h_generateInitialDist(struct cudaGraphicsResource **cudaVBOres,
+void h_generateInitialDist(struct cudaGraphicsResource **cudaPBOres,
 						   double3 *d_vel,
 						   double3 *d_acc,
+						   int     *d_atomID,
 						   int      numberOfAtoms,
 						   curandState_t *d_rngStates);
 
@@ -33,6 +34,7 @@ __global__ void d_initRNG(curandState_t *rngState,
 __global__ void d_generateInitialDist(double3 *pos,
 									  double3 *vel,
 									  double3 *acc,
+									  int     *atomID,
 									  int      numberOfAtoms,
 									  curandState_t *rngState);
 

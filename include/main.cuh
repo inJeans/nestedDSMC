@@ -40,6 +40,8 @@
 #include "numberCrunch.cuh"
 #include "openGLkernels.cuh"
 #include "openGLhelpers.hpp"
+#include "cudaHelpers.cuh"
+#include "collideAtoms.cuh"
 
 // Function prototypes
 

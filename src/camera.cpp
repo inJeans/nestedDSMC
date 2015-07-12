@@ -137,7 +137,5 @@ void Camera::updateCameraVectors()
 	this->Up    = glm::normalize(glm::cross(this->Right,
 											this->Front));
 	
-	std::cout << "pos = { " << this->Position.x << ", " << this->Position.y << ", " << this->Position.z << " }" << std::endl;
-	
 	return;
 }

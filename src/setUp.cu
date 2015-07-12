@@ -41,7 +41,7 @@ void h_initRNG(curandState_t *d_rngStates,
 	gridSize = 256*numSMs;
 	blockSize = NUM_THREADS;
 #endif
-	fprintf(stderr, "h_initRNG Error: %s\n", cudaGetErrorString( cudaGetLastError( ) ) );
+	
 	d_initRNG<<<gridSize,blockSize>>>(d_rngStates,
 									  sizeOfRNG);
 	
@@ -66,6 +66,7 @@ __global__ void d_initRNG(curandState_t *rngState,
 void h_generateInitialDist(struct cudaGraphicsResource **cudaPBOres,
 						   double3 *d_vel,
 						   double3 *d_acc,
+						   int     *d_atomID,
 						   int      numberOfAtoms,
 						   curandState_t *d_rngStates)
 {
@@ -99,6 +100,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaPBOres,
 	d_generateInitialDist<<<gridSize,blockSize>>>(d_pos,
 												  d_vel,
 												  d_acc,
+												  d_atomID,
 												  numberOfAtoms,
 												  d_rngStates);
 	
@@ -112,6 +114,7 @@ void h_generateInitialDist(struct cudaGraphicsResource **cudaPBOres,
 __global__ void d_generateInitialDist(double3 *pos,
                                       double3 *vel,
 									  double3 *acc,
+									  int     *atomID,
                                       int      numberOfAtoms,
                                       curandState_t *rngState)
 {
@@ -129,6 +132,8 @@ __global__ void d_generateInitialDist(double3 *pos,
 									   &l_rngState);
 		
 		acc[atom] = updateAcc(pos[atom]);
+		
+		atomID[atom] = atom;
 		
         // Copy state back to global memory
         rngState[atom] = l_rngState;

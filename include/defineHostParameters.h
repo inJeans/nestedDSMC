@@ -9,7 +9,7 @@
 #ifndef __nestedDSMC__defineHostParameters__
 #define __nestedDSMC__defineHostParameters__
 
-int NUMBER_OF_ATOMS = 5e3;
+int NUMBER_OF_ATOMS = 1e4;
 
 int NUM_THREADS = 256;
 
@@ -18,6 +18,8 @@ int NUM_THREADS = 256;
 ////////////////////////////////////////
 
 double h_dBdz = 2.5;
+
+int h_Nth = 1e2;
 
 
 #endif /* defined(__nestedDSMC__defineHostParameters__) */

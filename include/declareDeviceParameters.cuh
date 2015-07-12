@@ -17,5 +17,7 @@ extern __constant__ int d_NUMBER_OF_ATOMS;
 
 extern __device__ double d_dBdz;
 
+extern __device__ int d_Nth;
+
 
 #endif /* defined(__nestedDSMC__declareDeviceParameters__) */

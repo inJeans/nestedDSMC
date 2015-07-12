@@ -57,7 +57,7 @@ GLFWwindow* initGL( void )
         glfwTerminate();
 //        return -1;
     }
-	
+
 	// Set the required callback functions
     glfwSetKeyCallback(window,
 					   key_callback);
@@ -221,7 +221,7 @@ void renderParticles(GLuint *VAO,
 	
 	glBindVertexArray(*VAO);
 	
-	glPointSize(2.0f);
+	glPointSize(1.0f);
 	glDrawArrays(GL_POINTS,
 				 0,
 				 NUMBER_OF_ATOMS);

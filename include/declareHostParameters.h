@@ -19,5 +19,7 @@ extern int NUM_THREADS;
 
 extern double h_dBdz;
 
+extern int h_Nth;
+
 
 #endif /* defined(__nestedDSMC__declareHostParameters__) */

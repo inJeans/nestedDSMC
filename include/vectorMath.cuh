@@ -45,6 +45,11 @@ static __inline__ __device__ double3 operator* ( int3 a, double3 b )
 	return make_double3( a.x*b.x, a.y*b.y, a.z*b.z );
 }
 
+static __inline__ __device__ double3 operator* ( double3 a, int3 b )
+{
+	return make_double3( a.x*b.x, a.y*b.y, a.z*b.z );
+}
+
 static __inline__ __device__ double3 operator* ( double a, double3 b )
 {
 	return make_double3( a*b.x, a*b.y, a*b.z );
@@ -53,6 +58,11 @@ static __inline__ __device__ double3 operator* ( double a, double3 b )
 static __inline__ __device__ double3 operator* ( double3 a, double b )
 {
 	return make_double3( a.x*b, a.y*b, a.z*b );
+}
+
+static __inline__ __device__ double3 operator/ ( double3 a, double3 b )
+{
+	return make_double3( a.x/b.x, a.y/b.y, a.z/b.z );
 }
 
 static __inline__ __device__ double3 operator/ ( double3 a, int3 b )
@@ -193,9 +203,14 @@ static __inline__ __device__ __host__ double length( double3 v )
     return sqrt( dot(v,v) );
 }
 
-//static __inline__ __device__ int2 double2Toint2_rd( double2 a )
+static __inline__ __device__ int2 double2Toint2_rd( double2 a )
+{
+	return make_int2( __double2int_rd(a.x), __double2int_rd(a.y) );
+}
+
+//static __inline__ __device__ int3 double3Toint3_rd( double3 a )
 //{
-//	return make_int2( __double2int_rd(a.x), __double2int_rd(a.y) );
+//	return make_int3( __double2int_rd(a.x), __double2int_rd(a.y), __double2int_rd(a.z) );
 //}
 
 #endif

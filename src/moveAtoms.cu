@@ -42,6 +42,7 @@ void h_moveParticles(struct cudaGraphicsResource **cudaPBOres,
 	gridSize = 256*numSMs;
 	blockSize = NUM_THREADS;
 #endif
+//	std::cout << "gridsize = " << gridSize << " blocksize = " << blockSize << std::endl;
 	
 	// Map OpenGL buffer object for writing from CUDA
 	double3 *d_pos = mapCUDAVBOd3(cudaPBOres);
@@ -72,7 +73,7 @@ __global__ void d_moveParticles(double3 *pos,
 		double3 l_vel = vel[atom];
 		double3 l_acc = acc[atom];
 		
-		for (int i=0; i<10; i++) {
+		for (int i=0; i<30000; i++) {
 			velocityVerletUpdate(&l_pos,
 								 &l_vel,
 								 &l_acc,
